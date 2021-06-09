@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             text = view.findViewById(R.id.textView)
             text.text="토스트 크기"
 
-            toastScale = Toast(applicationContext)
+            toastScale = Toast(applicationContext)                                                                                                                                                                
             toastScale.duration=Toast.LENGTH_SHORT
             toastScale.setGravity(Gravity.LEFT,300,300)
             toastScale.view=view
