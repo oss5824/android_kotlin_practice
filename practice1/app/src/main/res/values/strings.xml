@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="toast_gravity">토스트 메시지 GRAVITY</string>
+    <string name="toast_button">토스트버튼</string>
+</resources>
