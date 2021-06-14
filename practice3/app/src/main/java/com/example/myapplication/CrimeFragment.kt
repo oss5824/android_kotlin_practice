@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.app.ProgressDialog.show
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -16,12 +17,16 @@ import androidx.lifecycle.Observer
 import java.util.*
 
 private const val ARG_CRIME_ID = "crime_id"
+private const val DIALOG_DATE = "DialogDate"
+private const val REQUEST_DATE = 0
+private const val REQUEST_TIME=1
 
-class CrimeFragment : Fragment() {
+class CrimeFragment : Fragment(),DatePickerFragment.Callbacks,TimePickerFragment.Callbacks {
 
     private lateinit var crime: Crime
     private lateinit var titleField: EditText
     private lateinit var dateButton: Button
+    private lateinit var timeButton: Button
     private lateinit var solvedCheckBox: CheckBox
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProvider(this).get(CrimeDetailViewModel::class.java)
@@ -50,12 +55,8 @@ class CrimeFragment : Fragment() {
 
         titleField = view.findViewById(R.id.crime_title) as EditText
         dateButton = view.findViewById(R.id.crime_date) as Button
+        timeButton = view.findViewById(R.id.crime_time) as Button
         solvedCheckBox = view.findViewById(R.id.crime_solved) as CheckBox
-
-        dateButton.apply {
-            text = crime.date.toString()
-            isEnabled = false
-        }
 
         return view
     }
@@ -64,9 +65,9 @@ class CrimeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         crimeDetailViewModel.crimeLiveData.observe(
             viewLifecycleOwner,
-            Observer{ crime->
-                crime?.let{
-                    this.crime=crime
+            Observer { crime ->
+                crime?.let {
+                    this.crime = crime
                     updateUI()
                 }
             }
@@ -75,9 +76,9 @@ class CrimeFragment : Fragment() {
 
     private fun updateUI() {
         titleField.setText(crime.title)
-        dateButton.text=crime.date.toString()
-        solvedCheckBox.apply{
-            isChecked=crime.isSolved
+        dateButton.text = crime.date.toString()
+        solvedCheckBox.apply {
+            isChecked = crime.isSolved
             jumpDrawablesToCurrentState()
         }
     }
@@ -103,6 +104,18 @@ class CrimeFragment : Fragment() {
                 crime.isSolved = isChecked
             }
         }
+        dateButton.setOnClickListener {
+            DatePickerFragment.newInstance(crime.date).apply {
+                setTargetFragment(this@CrimeFragment, REQUEST_DATE)
+                show(this@CrimeFragment.parentFragmentManager, "DialogDate")
+            }
+        }
+        timeButton.setOnClickListener{
+            TimePickerFragment().apply {
+                setTargetFragment(this@CrimeFragment, REQUEST_TIME)
+                show(this@CrimeFragment.parentFragmentManager,"DialogTime")
+            }
+        }
     }
 
     override fun onStop() {
@@ -119,5 +132,16 @@ class CrimeFragment : Fragment() {
                 arguments = args
             }
         }
+    }
+
+    override fun onDateSelected(date: Date) {
+        crime.date=date
+        updateUI()
+    }
+
+    override fun onTimeSelected(hour:Int,min:Int) {
+        crime.date.hours=hour
+        crime.date.minutes=min
+        updateUI()
     }
 }
