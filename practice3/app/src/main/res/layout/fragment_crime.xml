@@ -57,4 +57,19 @@
         android:text="해결됨"
         app:layout_constraintTop_toBottomOf="@+id/crime_time" />
 
+    <Button
+        android:id="@+id/crime_suspect"
+        android:text="용의자 선택"
+        app:layout_constraintTop_toBottomOf="@id/crime_solved"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/crime_report"
+        android:text="범죄 보고서 전송"
+        app:layout_constraintTop_toBottomOf="@id/crime_suspect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
